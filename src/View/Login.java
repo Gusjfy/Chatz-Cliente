@@ -1,29 +1,33 @@
+package View;
 
-import Client.ChatClient;
+
 import Controller.Controller;
+import Controller.Observer.LoginObserver;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Gustavo
  */
-public class Login extends javax.swing.JFrame {
-
-    private final ChatClient client;
+public class Login extends javax.swing.JFrame implements LoginObserver {
+    
     private Register registerFrame;
     private MainApp mainFrame;
-    Controller controller = Controller.getIntance();
-
+    private Controller controller;
+    
     public Login() {
         initComponents();
-
-        this.client = new ChatClient("localHost", 5555);
-        //client.connect();
+        controller = Controller.getIntance();
+        controller.attach(this);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -119,15 +123,17 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        controller.login(loginField.getText().toString(), passwordField.getText().toString());
+        try {
+            controller.login(loginField.getText().toString(), passwordField.getText().toString());
 
 //login();
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void SingupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SingupButtonActionPerformed
-        registerFrame = new Register(client);
-        registerFrame.setVisible(true);
-        setVisible(false);
+        controller.switchToSignUp();
     }//GEN-LAST:event_SingupButtonActionPerformed
 
     /**
@@ -176,22 +182,23 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField passwordField;
     // End of variables declaration//GEN-END:variables
 
-//    private void login() {
-//        try {
-//            String login = loginField.getText();
-//            String password = passwordField.getText();
-//            
-//            if (client.login(login, password)) {
-//                // aqui chama a tela userList
-//                mainFrame = new MainApp();
-//                mainFrame.setVisible(true);
-//                setVisible(false);
-//            } else {
-//                //mostra uma mensagem de erro
-//                JOptionPane.showMessageDialog(this, "email/password invalid");
-//            }
-//        } catch (IOException ex) {
-//            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    @Override
+    public void signUp() {
+        registerFrame = new Register();
+        registerFrame.setVisible(true);
+        setVisible(false);
+    }
+    
+    @Override
+    public void signIn() {
+        mainFrame = new MainApp();
+        mainFrame.setVisible(true);
+        setVisible(false);
+    }
+    
+    @Override
+    public void loginFailed() {
+        JOptionPane.showMessageDialog(null, "E-mail ou Senha incorreta!");
+    }
+    
 }

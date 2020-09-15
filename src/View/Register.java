@@ -1,31 +1,25 @@
+package View;
 
-import Client.ChatClient;
+
 import Controller.Controller;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Controller.Observer.LoginObserver;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Gustavo
  */
-public class Register extends javax.swing.JFrame {
+public class Register extends javax.swing.JFrame implements LoginObserver {
 
-    Controller con = Controller.getIntance();
+    Controller controller = Controller.getIntance();
 
-    private final ChatClient client;
     private Login loginFrame;
 
     /**
      * Creates new form Register
      */
-    public Register(ChatClient client) {
+    public Register() {
         initComponents();
-
-        this.client = client;
-
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -141,7 +135,7 @@ public class Register extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void singUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_singUpButtonActionPerformed
-        con.register(nickNameField.getText().toString(),
+        controller.register(nickNameField.getText().toString(),
                 emailField.getText().toString(),
                 passwordField.getText().toString(),
                 birthDateField.getText().toString());
@@ -150,7 +144,7 @@ public class Register extends javax.swing.JFrame {
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         loginFrame = new Login();
         loginFrame.setVisible(true);
-        setVisible(false);
+        this.setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
 
 
@@ -167,5 +161,19 @@ public class Register extends javax.swing.JFrame {
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JButton singUpButton;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void signUp() {
+
+    }
+
+    @Override
+    public void signIn() {
+    }
+
+    @Override
+    public void loginFailed() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
