@@ -21,6 +21,8 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
      */
     private UpdateData updateData;
     
+    private AddContact addContact;
+    
     private Controller controller = Controller.getIntance();
     
     private static MainApp instance = null;
@@ -192,7 +194,10 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     }//GEN-LAST:event_btnUpdateDataActionPerformed
 
     private void btnNewContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewContactActionPerformed
-
+        addContact = AddContact.getInstance();
+        addContact.setVisible(true);
+        setVisible(false);
+        
     }//GEN-LAST:event_btnNewContactActionPerformed
 
     private void btnRemoveContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveContactActionPerformed

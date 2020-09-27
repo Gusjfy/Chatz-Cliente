@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Controller.Observer;
 
 /**
  *
- * @author Leonardo Steinke
+ * @author Gustavo
  */
-public interface MainObserver {
-    
-    void LogOut();
+public interface AddContactObserver {
 
+    public void addContact(Boolean deuBoa);
+    
 }

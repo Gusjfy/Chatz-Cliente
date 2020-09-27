@@ -4,6 +4,7 @@ import Controller.Observer.LoginObserver;
 import Controller.Observer.MainObserver;
 import Controller.Observer.SignUpObserver;
 import Controller.Observer.UpdateObserver;
+import Controller.Observer.AddContactObserver;
 import Model.Usuario;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +12,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -122,7 +125,8 @@ public class Controller {
                     System.out.println("LOGADO COM SUCESSO");
                     notifySignIn();
                     if (entrada.readUTF().equalsIgnoreCase("true")) {
-
+                        System.out.println(entrada.readInt());
+                        System.out.println(entrada.readUTF());
                     }
                 } else {
 
@@ -138,6 +142,29 @@ public class Controller {
         u = null;
         friendList = null;
         notifyLogOut();
+    }
+    
+    public void addContact(String userEmail) throws IOException {
+        ObjectOutputStream saida;
+        try {
+            socket = new Socket("localhost", 5555);
+            saida = new ObjectOutputStream(socket.getOutputStream());
+            saida.writeInt(5);
+            saida.writeInt(u.getId());
+            saida.writeUTF(userEmail);
+            saida.flush();
+            ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+            String line;
+            while ((line = entrada.readUTF()) != null) {
+                if (line.equalsIgnoreCase("true")) {
+                    notifyAddContact(true);
+                } else {
+                    notifyAddContact(false);
+                }
+            }
+        } catch (IOException ex) {
+            socket.close();
+        }
     }
 
     public void fetchData() throws IOException {
@@ -170,6 +197,7 @@ public class Controller {
     private List<SignUpObserver> SignUpObservers = new ArrayList<>();
     private List<UpdateObserver> updateObservers = new ArrayList<>();
     private List<MainObserver> mainObservers = new ArrayList<>();
+    private List<AddContactObserver> addContactObservers = new ArrayList<>();
 
     public void attach(LoginObserver obs) {
         this.LoginObservers.add(obs);
@@ -202,6 +230,10 @@ public class Controller {
     public void detach(MainObserver obs) {
         this.mainObservers.remove(obs);
     }
+    
+    public void attach(AddContactObserver obs) {
+        this.addContactObservers.add(obs);
+    }
 
     private void notifySignIn() {
         for (LoginObserver LoginObserver : LoginObservers) {
@@ -227,5 +259,12 @@ public class Controller {
             mainObserver.LogOut();
         }
     }
+    
+    private void notifyAddContact(Boolean deuBoa) {
+         for (AddContactObserver addContactObserver : addContactObservers) {
+            addContactObserver.addContact(deuBoa);
+        }
+    }
+
 
 }
