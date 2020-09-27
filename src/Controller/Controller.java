@@ -12,8 +12,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -26,6 +24,14 @@ public class Controller {
     private List<Usuario> friendList = new ArrayList<>();
 
     private int PORT;
+
+    public int getPORT() {
+        return PORT;
+    }
+
+    public void setPORT(int PORT) {
+        this.PORT = PORT;
+    }
 
     private Usuario u;
 
@@ -123,6 +129,7 @@ public class Controller {
                     u.setSenha(entrada.readUTF());
                     u.setDataNascimento(entrada.readUTF());
                     System.out.println("LOGADO COM SUCESSO");
+                    PORT = (u.getId() + 5555);
                     notifySignIn();
                     if (entrada.readUTF().equalsIgnoreCase("true")) {
                         System.out.println(entrada.readInt());
@@ -135,15 +142,20 @@ public class Controller {
         } catch (IOException ex) {
             socket.close();
         }
+        fetchData();
+
+        GetConnections conections = new GetConnections();
+        conections.start();
+
     }
 
     public void LogOut() {
         PORT = 0;
-        u = null;
-        friendList = null;
+        u = new Usuario();
+        friendList = new ArrayList<>();
         notifyLogOut();
     }
-    
+
     public void addContact(String userEmail) throws IOException {
         ObjectOutputStream saida;
         try {
@@ -172,7 +184,6 @@ public class Controller {
             socket = new Socket("localhost", 5555);
             ObjectOutputStream saida = new ObjectOutputStream(socket.getOutputStream());
 
-            System.out.println("Client port is " + socket.getLocalPort());
             saida.writeInt(6);
             saida.writeInt(u.getId());
             saida.flush();
@@ -182,7 +193,6 @@ public class Controller {
                 if (line.equalsIgnoreCase("true")) {
                     int id = entrada.readInt();
                     String apelido = entrada.readUTF();
-                    System.out.println(apelido);
                     friendList.add(new Usuario(id, apelido));
                 }
             }
@@ -230,7 +240,7 @@ public class Controller {
     public void detach(MainObserver obs) {
         this.mainObservers.remove(obs);
     }
-    
+
     public void attach(AddContactObserver obs) {
         this.addContactObservers.add(obs);
     }
@@ -259,12 +269,11 @@ public class Controller {
             mainObserver.LogOut();
         }
     }
-    
+
     private void notifyAddContact(Boolean deuBoa) {
-         for (AddContactObserver addContactObserver : addContactObservers) {
+        for (AddContactObserver addContactObserver : addContactObservers) {
             addContactObserver.addContact(deuBoa);
         }
     }
-
 
 }

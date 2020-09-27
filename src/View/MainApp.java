@@ -41,7 +41,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        controller.fetchData();
+        
         
     }
 
