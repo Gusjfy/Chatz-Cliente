@@ -210,6 +210,7 @@ public class Controller {
     }
 
     public void fetchData() throws IOException {
+        friendList.clear();
         try {
             socket = new Socket("localhost", 5555);
             ObjectOutputStream saida = new ObjectOutputStream(socket.getOutputStream());
