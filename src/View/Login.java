@@ -1,33 +1,41 @@
 package View;
 
-
 import Controller.Controller;
 import Controller.Observer.LoginObserver;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Gustavo
  */
 public class Login extends javax.swing.JFrame implements LoginObserver {
-    
+
     private Register registerFrame;
     private MainApp mainFrame;
     private Controller controller;
-    
-    public Login() {
+
+    private Login() {
         initComponents();
+        setResizable(false);
         controller = Controller.getIntance();
         controller.attach(this);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
     }
-    
+
+    private static Login instance = null;
+
+    public static Login getInstance() {
+        if (instance == null) {
+            instance = new Login();
+        }
+
+        return instance;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -126,44 +134,18 @@ public class Login extends javax.swing.JFrame implements LoginObserver {
         try {
             controller.login(loginField.getText().toString(), passwordField.getText().toString());
 
-//login();
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void SingupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SingupButtonActionPerformed
-        controller.switchToSignUp();
+        registerFrame = Register.getInstance();
+        registerFrame.setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_SingupButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
@@ -183,22 +165,15 @@ public class Login extends javax.swing.JFrame implements LoginObserver {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void signUp() {
-        registerFrame = new Register();
-        registerFrame.setVisible(true);
-        setVisible(false);
-    }
-    
-    @Override
     public void signIn() {
-        mainFrame = new MainApp();
+        try {
+            mainFrame = MainApp.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
         mainFrame.setVisible(true);
         setVisible(false);
+
     }
-    
-    @Override
-    public void loginFailed() {
-        JOptionPane.showMessageDialog(null, "E-mail ou Senha incorreta!");
-    }
-    
+
 }

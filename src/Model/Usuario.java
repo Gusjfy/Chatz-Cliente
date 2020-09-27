@@ -15,6 +15,12 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(int id, String apelido) {
+        this.id = id;
+        this.apelido = apelido;
+    }
+
+    
     public int getId() {
         return id;
     }

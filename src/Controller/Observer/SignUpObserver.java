@@ -7,10 +7,10 @@ package Controller.Observer;
 
 /**
  *
- * @author leona
+ * @author Leonardo Steinke
  */
-public interface LoginObserver {
+public interface SignUpObserver {
 
-    void signIn();
+    public void signUp(String string);
 
 }

@@ -1,15 +1,15 @@
 package View;
 
-
 import Controller.Controller;
-import Controller.Observer.LoginObserver;
+import Controller.Observer.SignUpObserver;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Gustavo
  */
-public class Register extends javax.swing.JFrame implements LoginObserver {
+public class Register extends javax.swing.JFrame implements SignUpObserver {
 
     Controller controller = Controller.getIntance();
 
@@ -18,10 +18,21 @@ public class Register extends javax.swing.JFrame implements LoginObserver {
     /**
      * Creates new form Register
      */
-    public Register() {
+    private static Register instance = null;
+
+    public static Register getInstance() {
+        if (instance == null) {
+            instance = new Register();
+        }
+        return instance;
+    }
+
+    private Register() {
         initComponents();
         setLocationRelativeTo(null);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        controller.attach(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -142,9 +153,9 @@ public class Register extends javax.swing.JFrame implements LoginObserver {
     }//GEN-LAST:event_singUpButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        loginFrame = new Login();
+        loginFrame = Login.getInstance();
         loginFrame.setVisible(true);
-        this.setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
 
 
@@ -163,17 +174,13 @@ public class Register extends javax.swing.JFrame implements LoginObserver {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void signUp() {
+    public void signUp(String string) {
 
-    }
+        JOptionPane.showMessageDialog(null, string);
+        loginFrame = Login.getInstance();
+        loginFrame.setVisible(true);
+        setVisible(false);
 
-    @Override
-    public void signIn() {
-    }
-
-    @Override
-    public void loginFailed() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

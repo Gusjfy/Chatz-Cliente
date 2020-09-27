@@ -3,14 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Controller.Observer;
 
 /**
  *
- * @author leona
+ * @author Leonardo Steinke
  */
-public interface LoginObserver {
-
-    void signIn();
+public interface MainObserver {
+    
+    void LogOut();
+    
 
 }

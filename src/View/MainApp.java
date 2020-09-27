@@ -1,6 +1,8 @@
 package View;
 
-
+import Controller.Controller;
+import Controller.Observer.MainObserver;
+import java.io.IOException;
 import javax.swing.JFrame;
 
 /*
@@ -12,18 +14,33 @@ import javax.swing.JFrame;
  *
  * @author Gustavo
  */
-public class MainApp extends javax.swing.JFrame {
+public class MainApp extends javax.swing.JFrame implements MainObserver {
 
     /**
      * Creates new form MainApp
      */
     private UpdateData updateData;
-
-    public MainApp() {
+    
+    private Controller controller = Controller.getIntance();
+    
+    private static MainApp instance = null;
+    
+    public static MainApp getInstance() throws IOException {
+        if (instance == null) {
+            instance = new MainApp();
+        }
+        return instance;
+    }
+    
+    private MainApp() throws IOException {
         initComponents();
-
+        controller.attach(this);
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        controller.fetchData();
+        
     }
 
     /**
@@ -43,7 +60,7 @@ public class MainApp extends javax.swing.JFrame {
         btnRemoveContact = new javax.swing.JButton();
         btnLogoff = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListContacts = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -125,12 +142,12 @@ public class MainApp extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        jListContacts.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {};
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListContacts);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("Contacts");
@@ -169,7 +186,7 @@ public class MainApp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnStartChatActionPerformed
 
     private void btnUpdateDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateDataActionPerformed
-        updateData = new UpdateData();
+        updateData = UpdateData.getInstance();
         updateData.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_btnUpdateDataActionPerformed
@@ -183,7 +200,7 @@ public class MainApp extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveContactActionPerformed
 
     private void btnLogoffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoffActionPerformed
-        // TODO add your handling code here:
+        controller.LogOut();
     }//GEN-LAST:event_btnLogoffActionPerformed
 
 
@@ -194,9 +211,16 @@ public class MainApp extends javax.swing.JFrame {
     private javax.swing.JButton btnStartChat;
     private javax.swing.JButton btnUpdateData;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jListContacts;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void LogOut() {
+        Login login = Login.getInstance();
+        login.setVisible(true);
+        this.setVisible(false);
+    }
 }

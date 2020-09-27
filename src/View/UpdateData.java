@@ -19,10 +19,20 @@ public class UpdateData extends javax.swing.JFrame implements UpdateObserver {
     private MainApp main;
     private Controller controller;
 
-    public UpdateData() {
+    private static UpdateData instance = null;
+
+    public static UpdateData getInstance() {
+        if (instance == null) {
+            instance = new UpdateData();
+        }
+        return instance;
+    }
+
+    private UpdateData() {
         initComponents();
         controller = Controller.getIntance();
         controller.attach(this);
+        setResizable(false);
         setLocationRelativeTo(null);
 
         edtApelido.setText(controller.getU().getApelido());
@@ -135,7 +145,11 @@ public class UpdateData extends javax.swing.JFrame implements UpdateObserver {
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        main = new MainApp();
+        try {
+            main = MainApp.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(UpdateData.class.getName()).log(Level.SEVERE, null, ex);
+        }
         main.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_btnVoltarActionPerformed
@@ -155,7 +169,11 @@ public class UpdateData extends javax.swing.JFrame implements UpdateObserver {
     public void updateSuccessful() {
         JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
 
-        main = new MainApp();
+        try {
+            main = MainApp.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(UpdateData.class.getName()).log(Level.SEVERE, null, ex);
+        }
         main.setVisible(true);
         setVisible(false);
 
