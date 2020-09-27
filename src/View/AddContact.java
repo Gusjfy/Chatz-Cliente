@@ -25,7 +25,7 @@ public class AddContact extends javax.swing.JFrame implements AddContactObserver
     
     private static AddContact instance = null;
     
-    public static AddContact getInstance() {
+    public static AddContact getInstance() throws IOException {
         if (instance == null) {
             instance = new AddContact();
         }
@@ -34,7 +34,7 @@ public class AddContact extends javax.swing.JFrame implements AddContactObserver
     /**
      * Creates new form AddContact
      */
-    private AddContact() {
+    private AddContact() throws IOException {
         initComponents();
         controller = Controller.getIntance();
         controller.attach(this);

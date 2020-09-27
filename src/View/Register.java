@@ -2,6 +2,9 @@ package View;
 
 import Controller.Controller;
 import Controller.Observer.SignUpObserver;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -11,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class Register extends javax.swing.JFrame implements SignUpObserver {
 
-    Controller controller = Controller.getIntance();
+    Controller controller;
 
     private Login loginFrame;
 
@@ -20,14 +23,15 @@ public class Register extends javax.swing.JFrame implements SignUpObserver {
      */
     private static Register instance = null;
 
-    public static Register getInstance() {
+    public static Register getInstance() throws IOException {
         if (instance == null) {
             instance = new Register();
         }
         return instance;
     }
 
-    private Register() {
+    private Register() throws IOException {
+        this.controller = Controller.getIntance();
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -153,7 +157,11 @@ public class Register extends javax.swing.JFrame implements SignUpObserver {
     }//GEN-LAST:event_singUpButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        loginFrame = Login.getInstance();
+        try {
+            loginFrame = Login.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
         loginFrame.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_backButtonActionPerformed
@@ -177,7 +185,11 @@ public class Register extends javax.swing.JFrame implements SignUpObserver {
     public void signUp(String string) {
 
         JOptionPane.showMessageDialog(null, string);
-        loginFrame = Login.getInstance();
+        try {
+            loginFrame = Login.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+        }
         loginFrame.setVisible(true);
         setVisible(false);
 

@@ -3,6 +3,10 @@ package View;
 import Controller.Controller;
 import Controller.Observer.MainObserver;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import java.util.List;
@@ -28,6 +32,12 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
 
     private Controller controller = Controller.getIntance();
 
+    private List<JanelaChat> janelaChatList = new ArrayList<>();
+
+    public List<JanelaChat> getJanelaChatList() {
+        return janelaChatList;
+    }
+
     private static MainApp instance = null;
     
     private DefaultListModel<String> contactListModel;  
@@ -47,6 +57,10 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     }
 
     /**
@@ -188,17 +202,31 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartChatActionPerformed
-        // TODO add your handling code here:
+        int indice = 7;
+
+        try {
+            controller.startChat(indice);
+        } catch (IOException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnStartChatActionPerformed
 
     private void btnUpdateDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateDataActionPerformed
-        updateData = UpdateData.getInstance();
+        try {
+            updateData = UpdateData.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
         updateData.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_btnUpdateDataActionPerformed
 
     private void btnNewContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewContactActionPerformed
-        addContact = AddContact.getInstance();
+        try {
+            addContact = AddContact.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
         addContact.setVisible(true);
         setVisible(false);
 
@@ -228,17 +256,35 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
 
     @Override
     public void LogOut() {
-        Login login = Login.getInstance();
-        login.setVisible(true);
+        Login login;
+        try {
+            login = Login.getInstance();
+            login.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);
     }
 
     @Override
+<<<<<<< Updated upstream
     public void updateFriendList() {
         this.contactListModel.clear();
         List<String> friendList = controller.getFriendListView();
         for (String nick : friendList) {
             this.contactListModel.addElement(nick);
         }
+=======
+    public void newChat(int friendId) {
+        JanelaChat chat;
+        try {
+            chat = new JanelaChat(friendId);
+            janelaChatList.add(chat);
+            chat.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+>>>>>>> Stashed changes
     }
 }

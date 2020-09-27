@@ -20,8 +20,13 @@ import java.util.logging.Logger;
 public class GetConnections extends Thread {
 
     private ServerSocket server;
+    ObjectOutputStream saida;
+    int friendId;
+    Controller con;
 
-    Controller con = Controller.getIntance();
+    public GetConnections() throws IOException {
+        this.con = Controller.getIntance();
+    }
 
     @Override
     public void run() {
@@ -39,11 +44,23 @@ public class GetConnections extends Thread {
                 switch (code) {
                     case 1://KeepAlive
                         System.out.println("Servidor conectou");
-                        ObjectOutputStream saida = new ObjectOutputStream(conn.getOutputStream());
+                        saida = new ObjectOutputStream(conn.getOutputStream());
                         saida.writeUTF("true");
                         saida.flush();
                         break;
                     case 2://Recebe Solicitação para chat
+
+                        friendId = entrada.readInt();
+
+                        saida = new ObjectOutputStream(conn.getOutputStream());
+                        saida.writeUTF("true");
+                        saida.flush();
+                        con.StartNewChat(friendId);
+                        break;
+                    case 3:// Mensagem CLIENTE -> CLIENTE
+                        friendId = entrada.readInt();
+                        String mensagem = entrada.readUTF();
+                        con.displayMessage(friendId, mensagem);
                         break;
                 }
 

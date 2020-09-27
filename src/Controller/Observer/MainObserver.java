@@ -14,6 +14,10 @@ public interface MainObserver {
     
     void LogOut();
 
+<<<<<<< Updated upstream
     public void updateFriendList();
+=======
+    public void newChat(int friendId);
+>>>>>>> Stashed changes
 
 }

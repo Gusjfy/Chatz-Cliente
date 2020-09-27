@@ -21,14 +21,14 @@ public class UpdateData extends javax.swing.JFrame implements UpdateObserver {
 
     private static UpdateData instance = null;
 
-    public static UpdateData getInstance() {
+    public static UpdateData getInstance() throws IOException {
         if (instance == null) {
             instance = new UpdateData();
         }
         return instance;
     }
 
-    private UpdateData() {
+    private UpdateData() throws IOException {
         initComponents();
         controller = Controller.getIntance();
         controller.attach(this);

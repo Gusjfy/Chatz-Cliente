@@ -6,6 +6,8 @@ import Controller.Observer.SignUpObserver;
 import Controller.Observer.UpdateObserver;
 import Controller.Observer.AddContactObserver;
 import Model.Usuario;
+import View.JanelaChat;
+import View.MainApp;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -234,6 +236,45 @@ public class Controller {
         notifyUpdateFriendList();
     }
 
+    public void startChat(int i) throws IOException {
+        try {
+            
+            int friendId = i;
+            socket = new Socket("localhost", (5555 + friendId));
+            ObjectOutputStream saida = new ObjectOutputStream(socket.getOutputStream());
+
+            saida.writeInt(2);
+            saida.writeInt(u.getId());
+            saida.flush();
+            ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+            String line;
+            while ((line = entrada.readUTF()) != null) {
+                if (line.equalsIgnoreCase("true")) {
+                    StartNewChat(friendId);
+                }
+            }
+        } catch (IOException ex) {
+            socket.close();
+        }
+    }
+
+    void StartNewChat(int friendId) {
+
+        notifyStartNewChat(friendId);
+
+    }
+
+    MainApp main;
+
+    void displayMessage(int friendId, String mensagem) {
+        for (JanelaChat janela : main.getJanelaChatList()) {
+            if (janela.getFriendId() == friendId) {
+                janela.getConChat().sendMessage(mensagem);
+            }
+        }
+
+    }
+
     //Observers
     private List<LoginObserver> LoginObservers = new ArrayList<>();
     private List<SignUpObserver> SignUpObservers = new ArrayList<>();
@@ -320,6 +361,12 @@ public class Controller {
             friendList.add((friend.getOnline() == 1? "(Online) ":"(Offline) ") + friend.getApelido());
         }
         return friendList;
+    }
+
+    private void notifyStartNewChat(int friendId) {
+        for (MainObserver mainObserver : mainObservers) {
+            mainObserver.newChat(friendId);
+        }
     }
 
 }

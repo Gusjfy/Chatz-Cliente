@@ -17,7 +17,7 @@ public class Login extends javax.swing.JFrame implements LoginObserver {
     private MainApp mainFrame;
     private Controller controller;
 
-    private Login() {
+    private Login() throws IOException {
         initComponents();
         setResizable(false);
         controller = Controller.getIntance();
@@ -28,7 +28,7 @@ public class Login extends javax.swing.JFrame implements LoginObserver {
 
     private static Login instance = null;
 
-    public static Login getInstance() {
+    public static Login getInstance() throws IOException {
         if (instance == null) {
             instance = new Login();
         }
@@ -148,7 +148,11 @@ public class Login extends javax.swing.JFrame implements LoginObserver {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                try {
+                    new Login().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
