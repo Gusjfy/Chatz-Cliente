@@ -159,9 +159,9 @@ public class Controller {
                 while (true) {
 
                     try {
-                        Thread.sleep(10000);
                         fetchData();
                         System.out.println("Atualizou lista de contatos");
+                        Thread.sleep(10000);
                     } catch (IOException ex) {
                         Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (InterruptedException ex) {
@@ -231,7 +231,7 @@ public class Controller {
         } catch (IOException ex) {
             socket.close();
         }
-
+        notifyUpdateFriendList();
     }
 
     //Observers
@@ -276,7 +276,7 @@ public class Controller {
     public void attach(AddContactObserver obs) {
         this.addContactObservers.add(obs);
     }
-
+ 
     private void notifySignIn() {
         for (LoginObserver LoginObserver : LoginObservers) {
             LoginObserver.signIn();
@@ -302,10 +302,24 @@ public class Controller {
         }
     }
 
+    private void notifyUpdateFriendList() {
+        for (MainObserver mainObserver : mainObservers) {
+            mainObserver.updateFriendList();
+        }
+    }
+    
     private void notifyAddContact(Boolean deuBoa) {
         for (AddContactObserver addContactObserver : addContactObservers) {
             addContactObserver.addContact(deuBoa);
         }
+    }
+    
+    public List<String> getFriendListView(){
+        List<String> friendList = new ArrayList<>(); 
+        for (Usuario friend : this.friendList) {
+            friendList.add((friend.getOnline() == 1? "(Online) ":"(Offline) ") + friend.getApelido());
+        }
+        return friendList;
     }
 
 }

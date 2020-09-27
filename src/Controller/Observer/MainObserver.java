@@ -14,4 +14,6 @@ public interface MainObserver {
     
     void LogOut();
 
+    public void updateFriendList();
+
 }

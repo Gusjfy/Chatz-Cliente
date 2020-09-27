@@ -4,6 +4,9 @@ import Controller.Controller;
 import Controller.Observer.MainObserver;
 import java.io.IOException;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import java.util.List;
+import javax.swing.DefaultListModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -26,6 +29,8 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     private Controller controller = Controller.getIntance();
 
     private static MainApp instance = null;
+    
+    private DefaultListModel<String> contactListModel;  
 
     public static MainApp getInstance() throws IOException {
         if (instance == null) {
@@ -36,12 +41,12 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
 
     private MainApp() throws IOException {
         initComponents();
+        contactListModel = new DefaultListModel();
+        this.jListContacts.setModel(contactListModel);
         controller.attach(this);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
     }
 
     /**
@@ -226,5 +231,14 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         Login login = Login.getInstance();
         login.setVisible(true);
         this.setVisible(false);
+    }
+
+    @Override
+    public void updateFriendList() {
+        this.contactListModel.clear();
+        List<String> friendList = controller.getFriendListView();
+        for (String nick : friendList) {
+            this.contactListModel.addElement(nick);
+        }
     }
 }
