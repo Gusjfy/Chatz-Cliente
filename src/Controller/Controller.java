@@ -12,6 +12,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,6 +24,14 @@ public class Controller {
     private Socket socket;
 
     private List<Usuario> friendList = new ArrayList<>();
+
+    public List<Usuario> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(List<Usuario> friendList) {
+        this.friendList = friendList;
+    }
 
     private int PORT;
 
@@ -142,7 +152,27 @@ public class Controller {
         } catch (IOException ex) {
             socket.close();
         }
-        fetchData();
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+
+                    try {
+                        Thread.sleep(10000);
+                        fetchData();
+                        System.out.println("Atualizou lista de contatos");
+                    } catch (IOException ex) {
+                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+
+            }
+        });
+        t.start();
 
         GetConnections conections = new GetConnections();
         conections.start();
@@ -193,7 +223,8 @@ public class Controller {
                 if (line.equalsIgnoreCase("true")) {
                     int id = entrada.readInt();
                     String apelido = entrada.readUTF();
-                    friendList.add(new Usuario(id, apelido));
+                    int online = entrada.readInt();
+                    friendList.add(new Usuario(id, apelido, online));
                 }
             }
         } catch (IOException ex) {

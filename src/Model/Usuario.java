@@ -11,16 +11,25 @@ public class Usuario {
     private String senha;
     private String email;
     private String dataNascimento;
+    private int online;
 
     public Usuario() {
     }
 
-    public Usuario(int id, String apelido) {
+    public Usuario(int id, String apelido, int online) {
         this.id = id;
         this.apelido = apelido;
+        this.online = online;
     }
 
-    
+    public int getOnline() {
+        return online;
+    }
+
+    public void setOnline(int online) {
+        this.online = online;
+    }
+
     public int getId() {
         return id;
     }

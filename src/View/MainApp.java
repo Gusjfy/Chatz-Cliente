@@ -20,29 +20,28 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
      * Creates new form MainApp
      */
     private UpdateData updateData;
-    
+
     private AddContact addContact;
-    
+
     private Controller controller = Controller.getIntance();
-    
+
     private static MainApp instance = null;
-    
+
     public static MainApp getInstance() throws IOException {
         if (instance == null) {
             instance = new MainApp();
         }
         return instance;
     }
-    
+
     private MainApp() throws IOException {
         initComponents();
         controller.attach(this);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        
-        
+
+
     }
 
     /**
@@ -197,7 +196,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         addContact = AddContact.getInstance();
         addContact.setVisible(true);
         setVisible(false);
-        
+
     }//GEN-LAST:event_btnNewContactActionPerformed
 
     private void btnRemoveContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveContactActionPerformed
