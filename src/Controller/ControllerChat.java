@@ -56,6 +56,7 @@ public class ControllerChat extends Thread {
     private Socket socket;
 
     public void sendMessage(String mensagem) throws IOException {
+        
         try {
             socket = new Socket("localhost", (5555 + friendId));
             ObjectOutputStream saida = new ObjectOutputStream(socket.getOutputStream());
