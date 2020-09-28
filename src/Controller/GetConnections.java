@@ -67,7 +67,7 @@ public class GetConnections extends Thread {
                 conn.close();
                 // entrada.close();
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }

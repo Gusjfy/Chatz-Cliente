@@ -8,6 +8,8 @@ package Controller;
 import Model.Usuario;
 import View.JanelaChat;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.List;
 
 /**
@@ -51,13 +53,26 @@ public class ControllerChat extends Thread {
     public void run() {
 
     }
+    private Socket socket;
 
-    void sendMessage(String mensagem) {
-        janela.newMessage(mensagem);
+    public void sendMessage(String mensagem) throws IOException {
+        try {
+            socket = new Socket("localhost", (5555 + friendId));
+            ObjectOutputStream saida = new ObjectOutputStream(socket.getOutputStream());
+            saida.writeInt(3);
+            saida.writeInt(controller.getU().getId());
+            saida.writeUTF(mensagem);
+            saida.flush();
+            janela.newMessage(mensagem);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        socket.close();
 
     }
 
-    void receiveMessage(String mensagem) {
+    public void receiveMessage(String mensagem) {
         janela.newMessage(friend.getApelido(), mensagem);
 
     }

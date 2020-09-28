@@ -140,7 +140,11 @@ public class Login extends javax.swing.JFrame implements LoginObserver {
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void SingupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SingupButtonActionPerformed
-        registerFrame = Register.getInstance();
+        try {
+            registerFrame = Register.getInstance();
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
         registerFrame.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_SingupButtonActionPerformed

@@ -238,8 +238,8 @@ public class Controller {
 
     public void startChat(int i) throws IOException {
         try {
-            
-            int friendId = i;
+
+            int friendId = friendList.get(i).getId();
             socket = new Socket("localhost", (5555 + friendId));
             ObjectOutputStream saida = new ObjectOutputStream(socket.getOutputStream());
 
@@ -264,12 +264,12 @@ public class Controller {
 
     }
 
-    MainApp main;
-
-    void displayMessage(int friendId, String mensagem) {
+    void displayMessage(int friendId, String mensagem) throws IOException {
+        MainApp main = MainApp.getInstance();
         for (JanelaChat janela : main.getJanelaChatList()) {
             if (janela.getFriendId() == friendId) {
-                janela.getConChat().sendMessage(mensagem);
+                janela.getConChat().receiveMessage(mensagem);
+                break;
             }
         }
 
@@ -317,7 +317,7 @@ public class Controller {
     public void attach(AddContactObserver obs) {
         this.addContactObservers.add(obs);
     }
- 
+
     private void notifySignIn() {
         for (LoginObserver LoginObserver : LoginObservers) {
             LoginObserver.signIn();
@@ -348,17 +348,17 @@ public class Controller {
             mainObserver.updateFriendList();
         }
     }
-    
+
     private void notifyAddContact(Boolean deuBoa) {
         for (AddContactObserver addContactObserver : addContactObservers) {
             addContactObserver.addContact(deuBoa);
         }
     }
-    
-    public List<String> getFriendListView(){
-        List<String> friendList = new ArrayList<>(); 
+
+    public List<String> getFriendListView() {
+        List<String> friendList = new ArrayList<>();
         for (Usuario friend : this.friendList) {
-            friendList.add((friend.getOnline() == 1? "(Online) ":"(Offline) ") + friend.getApelido());
+            friendList.add((friend.getOnline() == 1 ? "(Online) " : "(Offline) ") + friend.getApelido());
         }
         return friendList;
     }

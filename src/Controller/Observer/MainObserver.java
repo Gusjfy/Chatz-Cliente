@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Controller.Observer;
 
 /**
@@ -11,13 +10,11 @@ package Controller.Observer;
  * @author Leonardo Steinke
  */
 public interface MainObserver {
-    
+
     void LogOut();
 
-<<<<<<< Updated upstream
     public void updateFriendList();
-=======
+
     public void newChat(int friendId);
->>>>>>> Stashed changes
 
 }

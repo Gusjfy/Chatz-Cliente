@@ -32,15 +32,15 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
 
     private Controller controller = Controller.getIntance();
 
-    private List<JanelaChat> janelaChatList = new ArrayList<>();
+    private List<JanelaChat> janelaChatList;
 
     public List<JanelaChat> getJanelaChatList() {
         return janelaChatList;
     }
 
     private static MainApp instance = null;
-    
-    private DefaultListModel<String> contactListModel;  
+
+    private DefaultListModel<String> contactListModel;
 
     public static MainApp getInstance() throws IOException {
         if (instance == null) {
@@ -51,16 +51,14 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
 
     private MainApp() throws IOException {
         initComponents();
+        janelaChatList = new ArrayList<>();
         contactListModel = new DefaultListModel();
         this.jListContacts.setModel(contactListModel);
         controller.attach(this);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     }
 
     /**
@@ -202,10 +200,8 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnStartChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartChatActionPerformed
-        int indice = 7;
-
         try {
-            controller.startChat(indice);
+            controller.startChat(jListContacts.getSelectedIndex());
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -267,14 +263,15 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     }
 
     @Override
-<<<<<<< Updated upstream
     public void updateFriendList() {
         this.contactListModel.clear();
         List<String> friendList = controller.getFriendListView();
         for (String nick : friendList) {
             this.contactListModel.addElement(nick);
         }
-=======
+    }
+
+    @Override
     public void newChat(int friendId) {
         JanelaChat chat;
         try {
@@ -285,6 +282,5 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
 
->>>>>>> Stashed changes
     }
 }
