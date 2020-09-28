@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -229,7 +230,16 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     }//GEN-LAST:event_btnNewContactActionPerformed
 
     private void btnRemoveContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveContactActionPerformed
-        // TODO add your handling code here:
+        Object[] options = { "Confirmar", "Cancelar" };
+        int resposta = JOptionPane.showOptionDialog(null, "Deseja Realmente excluir o contato selecionado?", "Remover Contato", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        
+        if (resposta == 0) {
+            try {
+                controller.removeContact(this.jListContacts.getSelectedIndex());
+            } catch (IOException ex) {
+                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnRemoveContactActionPerformed
 
     private void btnLogoffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoffActionPerformed
@@ -282,5 +292,14 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    @Override
+    public void removeContact(Boolean deuBoa) {
+        if (deuBoa) {
+            JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Não foi possível remover o contato.");
+        }
     }
 }

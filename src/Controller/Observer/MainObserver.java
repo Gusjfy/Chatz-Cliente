@@ -17,4 +17,6 @@ public interface MainObserver {
 
     public void newChat(int friendId);
 
+    public void removeContact(Boolean deuBoa);
+
 }

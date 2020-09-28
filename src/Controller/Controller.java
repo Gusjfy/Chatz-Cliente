@@ -26,6 +26,7 @@ public class Controller {
     private Socket socket;
 
     private List<Usuario> friendList = new ArrayList<>();
+    private List<Usuario> friendListClone = new ArrayList<>();
 
     public List<Usuario> getFriendList() {
         return friendList;
@@ -210,8 +211,32 @@ public class Controller {
             socket.close();
         }
     }
+    
+    public void removeContact(int index ) throws IOException{
+        ObjectOutputStream saida;
+        try {
+            socket = new Socket("localhost", 5555);
+            saida = new ObjectOutputStream(socket.getOutputStream());
+            saida.writeInt(7);
+            saida.writeInt(this.friendListClone.get(index).getId());
+            saida.writeUTF(u.getEmail());
+            saida.flush();
+            ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
+            String line;
+            while ((line = entrada.readUTF()) != null) {
+                if (line.equalsIgnoreCase("true")) {
+                    notifyRemoveContact(true);
+                } else {
+                    notifyRemoveContact(false);
+                }
+            }
+        } catch (IOException ex) {
+            socket.close();
+        }
+    }
 
     public void fetchData() throws IOException {
+        friendListClone = new ArrayList<>(friendList);
         friendList.clear();
         try {
             socket = new Socket("localhost", 5555);
@@ -233,6 +258,7 @@ public class Controller {
         } catch (IOException ex) {
             socket.close();
         }
+        System.out.println("Atualizou a lista");
         notifyUpdateFriendList();
     }
 
@@ -349,12 +375,18 @@ public class Controller {
         }
     }
 
+    private void notifyRemoveContact(Boolean deuBoa) {
+        for (MainObserver mainObserver : mainObservers) {
+            mainObserver.removeContact(deuBoa);
+        } 
+    }
+    
     private void notifyAddContact(Boolean deuBoa) {
         for (AddContactObserver addContactObserver : addContactObservers) {
             addContactObserver.addContact(deuBoa);
         }
     }
-
+    
     public List<String> getFriendListView() {
         List<String> friendList = new ArrayList<>();
         for (Usuario friend : this.friendList) {
