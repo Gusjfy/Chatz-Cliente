@@ -8,6 +8,8 @@ package View;
 import Controller.Controller;
 import Controller.ControllerChat;
 import Model.Arquivo;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -57,6 +59,18 @@ public class JanelaChat extends javax.swing.JFrame {
         nomeAmigo.setText(conChat.getFriend().getApelido());
 
         conChat.start();
+
+        txtMyMessage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    conChat.sendMessage(txtMyMessage.getText().toString());
+                    txtMyMessage.setText("");
+                } catch (IOException ex) {
+                    Logger.getLogger(JanelaChat.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     /**
@@ -90,6 +104,12 @@ public class JanelaChat extends javax.swing.JFrame {
         jLabel1.setText("Conversa com: ");
 
         nomeAmigo.setText("jLabel2");
+
+        txtMyMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMyMessageActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Enviar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -188,6 +208,10 @@ public class JanelaChat extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnEnviarArquivoActionPerformed
+
+    private void txtMyMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMyMessageActionPerformed
+
+    }//GEN-LAST:event_txtMyMessageActionPerformed
 
     /**
      * @param args the command line arguments

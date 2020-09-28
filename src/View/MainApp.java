@@ -4,11 +4,9 @@ import Controller.Controller;
 import Controller.Observer.MainObserver;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -28,28 +26,28 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
      * Creates new form MainApp
      */
     private UpdateData updateData;
-
+    
     private AddContact addContact;
-
+    
     private Controller controller = Controller.getIntance();
-
+    
     private List<JanelaChat> janelaChatList;
-
+    
     public List<JanelaChat> getJanelaChatList() {
         return janelaChatList;
     }
-
+    
     private static MainApp instance = null;
-
+    
     private DefaultListModel<String> contactListModel;
-
+    
     public static MainApp getInstance() throws IOException {
         if (instance == null) {
             instance = new MainApp();
         }
         return instance;
     }
-
+    
     private MainApp() throws IOException {
         initComponents();
         janelaChatList = new ArrayList<>();
@@ -59,7 +57,8 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        txtUsuarioLogado.setText("Usuario logado: " + controller.getU().getApelido());
+        
     }
 
     /**
@@ -78,6 +77,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         btnNewContact = new javax.swing.JButton();
         btnRemoveContact = new javax.swing.JButton();
         btnLogoff = new javax.swing.JButton();
+        txtUsuarioLogado = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jListContacts = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
@@ -119,25 +119,35 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
             }
         });
 
+        txtUsuarioLogado.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        txtUsuarioLogado.setText("jLabel2");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(138, 138, 138)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLogoff, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRemoveContact, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNewContact, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnUpdateData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnStartChat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(138, 138, 138)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnLogoff, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRemoveContact, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNewContact, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnUpdateData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnStartChat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(txtUsuarioLogado)))
                 .addContainerGap(142, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(122, 122, 122)
+                .addGap(21, 21, 21)
+                .addComponent(txtUsuarioLogado)
+                .addGap(85, 85, 85)
                 .addComponent(btnUpdateData)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNewContact)
@@ -230,7 +240,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     }//GEN-LAST:event_btnNewContactActionPerformed
 
     private void btnRemoveContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveContactActionPerformed
-        Object[] options = { "Confirmar", "Cancelar" };
+        Object[] options = {"Confirmar", "Cancelar"};
         int resposta = JOptionPane.showOptionDialog(null, "Deseja Realmente excluir o contato selecionado?", "Remover Contato", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         
         if (resposta == 0) {
@@ -258,6 +268,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel txtUsuarioLogado;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -271,7 +282,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         }
         this.setVisible(false);
     }
-
+    
     @Override
     public void updateFriendList() {
         this.contactListModel.clear();
@@ -280,7 +291,7 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
             this.contactListModel.addElement(nick);
         }
     }
-
+    
     @Override
     public void newChat(int friendId) {
         JanelaChat chat;
@@ -291,9 +302,9 @@ public class MainApp extends javax.swing.JFrame implements MainObserver {
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
-
+    
     @Override
     public void removeContact(Boolean deuBoa) {
         if (deuBoa) {
