@@ -7,11 +7,15 @@ package View;
 
 import Controller.Controller;
 import Controller.ControllerChat;
+import Model.Arquivo;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -24,19 +28,21 @@ public class JanelaChat extends javax.swing.JFrame {
      */
     Controller con;
     ControllerChat conChat;
-    
+
+    Arquivo arquivo;
+
     private DefaultListModel<String> messages;
-    
+
     private final int friendId;
-    
+
     public int getFriendId() {
         return friendId;
     }
-    
+
     public ControllerChat getConChat() {
         return conChat;
     }
-    
+
     JanelaChat(int friendId) throws IOException {
         initComponents();
         setLocationRelativeTo(null);
@@ -47,9 +53,9 @@ public class JanelaChat extends javax.swing.JFrame {
         conChat = new ControllerChat(friendId);
         conChat.attatch(this);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
-        
+
         nomeAmigo.setText(conChat.getFriend().getApelido());
-        
+
         conChat.start();
     }
 
@@ -70,6 +76,7 @@ public class JanelaChat extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jListMessages = new javax.swing.JList<>();
+        btnEnviarArquivo = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -98,6 +105,13 @@ public class JanelaChat extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jListMessages);
 
+        btnEnviarArquivo.setText("Enviar arquivo");
+        btnEnviarArquivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarArquivoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,12 +124,14 @@ public class JanelaChat extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nomeAmigo)
-                        .addContainerGap(259, Short.MAX_VALUE))
+                        .addContainerGap(356, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtMyMessage)
+                        .addComponent(txtMyMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addGap(18, 18, 18))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEnviarArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(14, 14, 14))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,11 +141,12 @@ public class JanelaChat extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(nomeAmigo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMyMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(btnEnviarArquivo))
                 .addGap(18, 18, 18))
         );
 
@@ -145,11 +162,39 @@ public class JanelaChat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnEnviarArquivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarArquivoActionPerformed
+        FileInputStream fis;
+        try {
+
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setDialogTitle("Escolha o arquivo");
+
+            if (chooser.showOpenDialog(this) == JFileChooser.OPEN_DIALOG) {
+                File fileSelected = chooser.getSelectedFile();
+
+                byte[] bFile = new byte[(int) fileSelected.length()];
+                fis = new FileInputStream(fileSelected);
+                fis.read(bFile);
+                fis.close();
+
+                arquivo = new Arquivo();
+                arquivo.setConteudo(bFile);
+                arquivo.setNome(fileSelected.getName());
+                conChat.sendFile(arquivo);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnEnviarArquivoActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnviarArquivo;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jList1;
@@ -161,14 +206,14 @@ public class JanelaChat extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void newMessage(String mensagem) {
-        
+
         this.messages.addElement(con.getU().getApelido() + ": " + mensagem);
     }
-    
+
     public void newMessage(String apelido, String mensagem) {
-        
+
         this.messages.addElement(apelido + ": " + mensagem);
-        
+
     }
-    
+
 }
